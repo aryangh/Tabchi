@@ -4,7 +4,7 @@ TG-CLI Based Broadcasting Bot.
 
 ## راهنمای نصب :
 
-git clone https://Github.com/kia-pashang/Tabchi.git
+git clone https://github.com/aryangh/Tabchi.git
 
 cd Tabchi
 
