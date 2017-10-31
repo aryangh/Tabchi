@@ -645,12 +645,12 @@ New Added Message Set
 Message :
 ]] .. tostring(matches[2])
       end
-    elseif text_:match("^[!/#](bc) (.*)") then
+    elseif text_:match("^[!/#](bcs) (.*)") then
       local matches = {
-        text_:match("^[!/#](bc) (.*)")
+        text_:match("^[!/#](bcs) (.*)")
       }
       if #matches == 2 then
-        local all = redis:smembers("tabchi:" .. tostring(tabchi_id) .. ":all")
+        local all = redis:smembers("tabchi:" .. tostring(tabchi_id) .. ":channels")
         for i, v in pairs(all) do
           tdcli_function({
             ID = "SendMessage",
@@ -671,8 +671,37 @@ Message :
             }
           }, dl_cb, nil)
         end
-        save_log("User " .. msg.sender_user_id_ .. ", Used BC, Content " .. matches[2])
-        return "Sent!"
+        save_log("User " .. msg.sender_user_id_ .. ", Used BCS, Content " .. matches[2])
+        return "Sent to SuperGroups!"
+      end
+   elseif text_:match("^[!/#](bcg) (.*)") then
+      local matches = {
+        text_:match("^[!/#](bcg) (.*)")
+      }
+      if #matches == 2 then
+        local all = redis:smembers("tabchi:" .. tostring(tabchi_id) .. ":groups")
+        for i, v in pairs(all) do
+          tdcli_function({
+            ID = "SendMessage",
+            chat_id_ = v,
+            reply_to_message_id_ = 0,
+            disable_notification_ = 0,
+            from_background_ = 1,
+            reply_markup_ = nil,
+            input_message_content_ = {
+              ID = "InputMessageText",
+              text_ = matches[2],
+              disable_web_page_preview_ = 0,
+              clear_draft_ = 0,
+              entities_ = {},
+              parse_mode_ = {
+                ID = "TextParseModeHTML"
+              }
+            }
+          }, dl_cb, nil)
+        end
+        save_log("User " .. msg.sender_user_id_ .. ", Used BCG, Content " .. matches[2])
+        return "Sent to groups !"
       end
     elseif text_:match("^[!/#](fwd) (.*)$") then
       local matches = {
