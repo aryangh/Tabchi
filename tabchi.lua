@@ -93,20 +93,31 @@ function our_id(extra, result)
     redis:set("tabchi:" .. tostring(tabchi_id) .. ":botinfo", JSON.encode(result))
   end
 end
-local process_links
-function process_links(text)
-  if text:match("https://telegram.me/joinchat/%S+") or text:match("https://t.me/joinchat/%S+") or text:match("https://telegram.dog/joinchat/%S+") then
-    text = text:gsub("telegram.dog", "telegram.me")
-    local matches = {
-      text:match("(https://telegram.me/joinchat/%S+)")
-    }
-    for i, v in pairs(matches) do
-      tdcli_function({
-        ID = "CheckChatInviteLink",
-        invite_link_ = v
-      }, check_link, {link = v})
-    end
-  end
+--local process_links
+--function process_links(text)
+--  if text:match("https://telegram.me/joinchat/%S+") or text:match("https://t.me/joinchat/%S+") or text:match("https://telegram.dog/joinchat/%S+") then
+--    text = text:gsub("telegram.dog", "telegram.me")
+--    local matches = {
+--      text:match("(https://telegram.me/joinchat/%S+)")
+--    }
+--    for i, v in pairs(matches) do
+--      tdcli_function({
+--        ID = "CheckChatInviteLink",
+--        invite_link_ = v
+--      }, check_link, {link = v})
+--    end
+--  end
+--end
+local joinlink = (d:get('joinlink') or 'no') 
+	if text and text:match("https://telegram.me/joinchat/%S+") or text and text:match("https://t.me/joinchat/%S+") or text and text:match("https://t.me/joinchat/%S+")  or text and text:match("https://telegram.dog/joinchat/%S+") then
+		local text = text:gsub("t.me", "telegram.me")
+		for link in text:gmatch("(https://telegram.me/joinchat/%S+)") do
+			if not d:sismember("links", link) then
+				d:sadd("links", link)
+				tabchi.importChatInviteLink(link)
+			end
+		end
+end
 end
 local add
 function add(id)
